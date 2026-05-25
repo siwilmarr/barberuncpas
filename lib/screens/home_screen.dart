@@ -228,14 +228,14 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         title: Row(
           children: [
-            Image.asset('assets/image/logo.png', width: 82, height: 82),
+            Image.asset('assets/image/logo.png', width: 45, height: 45),
             const SizedBox(width: 8),
             RichText(
               text: TextSpan(
                 style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold),
                 children: [
                   const TextSpan(text: 'BARBER', style: TextStyle(color: Color(0xFFE69110))),
-                  const TextSpan(text: 'U', style: TextStyle(color: Color(0xFFA0522D))),
+                  const TextSpan(text: 'U', style: TextStyle(color: Colors.white)),
                   const TextSpan(text: 'NPAS', style: TextStyle(color: Color(0xFFE69110))),
                 ],
               ),

@@ -290,14 +290,14 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/image/logo.png', width: 170, height: 170),
+                Image.asset('assets/image/logo.png', width: 140, height: 140),
                 const SizedBox(height: 0),
                 RichText(
                   text: TextSpan(
                     style: GoogleFonts.poppins(fontSize: 25, fontWeight: FontWeight.bold),
                     children: [
                       const TextSpan(text: 'BARBER', style: TextStyle(color: Color(0xFFE69110))),
-                      const TextSpan(text: 'U', style: TextStyle(color: Color(0xFFA0522D))),
+                      const TextSpan(text: 'U', style: TextStyle(color: Colors.white)),
                       const TextSpan(text: 'NPAS', style: TextStyle(color: Color(0xFFE69110))),
                     ],
                   ),

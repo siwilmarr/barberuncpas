@@ -208,14 +208,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 0),
           child: Column(
             children: [
-              Image.asset('assets/image/logo.png', width: 170, height: 170),
+              Image.asset('assets/image/logo.png', width: 140, height: 140),
               const SizedBox(height: 0),
               RichText(
                 text: TextSpan(
                   style: GoogleFonts.poppins(fontSize: 28, fontWeight: FontWeight.bold),
                   children: [
                     const TextSpan(text: 'BARBER', style: TextStyle(color: Color(0xFFE69110))),
-                    const TextSpan(text: 'U', style: TextStyle(color: Color(0xFFA0522D))),
+                    const TextSpan(text: 'U', style: TextStyle(color: Colors.white)),
                     const TextSpan(text: 'NPAS', style: TextStyle(color: Color(0xFFE69110))),
                   ],
                 ),
