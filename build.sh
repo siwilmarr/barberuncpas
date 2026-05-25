@@ -15,8 +15,8 @@ export PATH="$PATH:`pwd`/flutter/bin"
 # 4. Aktifkan fitur Web
 flutter config --enable-web
 
-# 5. Jalankan Build
+# 5. Jalankan Build (Menggunakan renderer HTML untuk kompatibilitas lebih baik)
 echo "Building Flutter Web..."
-flutter build web --release
+flutter build web --release --web-renderer html
 
 echo "Build Finished Successfully!"
