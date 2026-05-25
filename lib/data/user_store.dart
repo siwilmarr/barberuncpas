@@ -113,6 +113,14 @@ class UserStore extends ChangeNotifier {
     return false;
   }
 
+  Future<void> updatePassword(String email, String newPassword) async {
+    if (_users.containsKey(email)) {
+      _users[email]['password'] = newPassword;
+      await _saveMasterDb();
+      notifyListeners();
+    }
+  }
+
   Future<void> addToHistory(String shopName) async {
     if (_currentUser == null) return;
 
@@ -126,7 +134,6 @@ class UserStore extends ChangeNotifier {
     
     _currentUser!.history = currentHistory;
     
-    // Simpan ke database Master (Permanen per user)
     if (_users.containsKey(_currentUser!.email)) {
       _users[_currentUser!.email]['history'] = currentHistory;
       await _saveMasterDb();
@@ -141,10 +148,8 @@ class UserStore extends ChangeNotifier {
       if (name != null) _currentUser!.name = name;
       if (photoUrl != null) _currentUser!.photoUrl = photoUrl;
       
-      // Update Sesi Aktif
       await _saveActiveSession();
       
-      // Update Database Master (Permanen)
       if (_users.containsKey(_currentUser!.email)) {
         if (name != null) _users[_currentUser!.email]['name'] = name;
         if (photoUrl != null) _users[_currentUser!.email]['photoUrl'] = photoUrl;
@@ -156,7 +161,6 @@ class UserStore extends ChangeNotifier {
   }
 
   Future<void> setGoogleUser(String name, String email, String? photoUrl) async {
-    // Untuk Google User, kita cek apakah sudah ada di master db
     if (!_users.containsKey(email)) {
       _users[email] = {
         'password': 'google_auth_user',
@@ -200,5 +204,20 @@ class UserStore extends ChangeNotifier {
     _currentUser = null;
     await _prefs?.remove('barber_active_session');
     notifyListeners();
+  }
+
+  Future<void> deleteAccount() async {
+    if (_currentUser != null) {
+      String email = _currentUser!.email;
+      // 1. Hapus dari database master
+      _users.remove(email);
+      await _saveMasterDb();
+
+      // 2. Hapus sesi aktif
+      _currentUser = null;
+      await _prefs?.remove('barber_active_session');
+      
+      notifyListeners();
+    }
   }
 }

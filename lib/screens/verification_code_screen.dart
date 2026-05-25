@@ -7,7 +7,8 @@ import 'create_new_password_screen.dart';
 
 class VerificationCodeScreen extends StatefulWidget {
   final String correctCode;
-  const VerificationCodeScreen({super.key, required this.correctCode});
+  final String email; // Tambahkan parameter email
+  const VerificationCodeScreen({super.key, required this.correctCode, required this.email});
 
   @override
   State<VerificationCodeScreen> createState() => _VerificationCodeScreenState();
@@ -50,7 +51,6 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
   }
 
   void _resendCode() {
-    // Generate kode baru (simulasi)
     String newCode = (Random().nextInt(900000) + 100000).toString();
     setState(() {
       _currentCorrectCode = newCode;
@@ -62,13 +62,11 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
     debugPrint('KODE VERIFIKASI BARU ANDA: $newCode');
     debugPrint('=========================================');
 
-    // Hapus input lama
     for (var controller in _controllers) {
       controller.clear();
     }
     _focusNodes[0].requestFocus();
 
-    // Mulai ulang timer
     startTimer();
   }
 
@@ -156,7 +154,6 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
   }
 
   void _handleVerify() {
-    // Cek apakah waktu sudah habis
     if (_start == 0) {
       _showStatusDialog(
         title: 'Kode Kedaluwarsa',
@@ -164,7 +161,6 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
         icon: Icons.timer_off_outlined,
         iconColor: const Color(0xFFF87171),
       );
-      // Hapus kode yang sudah diisi
       for (var controller in _controllers) {
         controller.clear();
       }
@@ -202,21 +198,20 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
         iconColor: const Color(0xFFF87171),
       );
       
-      // HAPUS SEMUA INPUT JIKA SALAH
       setState(() {
         for (var controller in _controllers) {
           controller.clear();
         }
       });
-      // Pindahkan fokus kembali ke kotak pertama
       _focusNodes[0].requestFocus();
       return;
     }
 
-    // Success
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CreateNewPasswordScreen()),
+      MaterialPageRoute(
+        builder: (context) => CreateNewPasswordScreen(email: widget.email), // Teruskan email
+      ),
     );
   }
 
@@ -242,7 +237,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
             style: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.bold),
             children: [
               const TextSpan(text: 'BARBER', style: TextStyle(color: Color(0xFFE69110))),
-              const TextSpan(text: 'U', style: TextStyle(color: Color(0xFFA0522D))),
+              const TextSpan(text: 'U', style: TextStyle(color: Colors.white)),
               const TextSpan(text: 'NPAS', style: TextStyle(color: Color(0xFFE69110))),
             ],
           ),
@@ -254,7 +249,6 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
           child: Column(
             children: [
               const SizedBox(height: 40),
-              // Form Card
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
                 decoration: BoxDecoration(
@@ -264,7 +258,6 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                 ),
                 child: Column(
                   children: [
-                    // Lock Icon
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -293,7 +286,6 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                       ),
                     ),
                     const SizedBox(height: 40),
-                    // OTP Input Fields
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: List.generate(6, (index) {
@@ -335,7 +327,6 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                       }),
                     ),
                     const SizedBox(height: 40),
-                    // Verify Button
                     SizedBox(
                       width: double.infinity,
                       height: 56,
@@ -360,7 +351,6 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                 ),
               ),
               const SizedBox(height: 32),
-              // Timer and Resend
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

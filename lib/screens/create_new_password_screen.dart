@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../data/user_store.dart';
 
 class CreateNewPasswordScreen extends StatefulWidget {
-  const CreateNewPasswordScreen({super.key});
+  final String email; // Tambahkan parameter email
+  const CreateNewPasswordScreen({super.key, required this.email});
 
   @override
   State<CreateNewPasswordScreen> createState() => _CreateNewPasswordScreenState();
@@ -12,6 +14,7 @@ class CreateNewPasswordScreen extends StatefulWidget {
 class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final UserStore _userStore = UserStore();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _isMinLength = false;
@@ -111,7 +114,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
     );
   }
 
-  void _handleSavePassword() {
+  Future<void> _handleSavePassword() async {
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
@@ -135,10 +138,12 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
       return;
     }
 
-    // Success logic
+    // UPDATE PASSWORD DI DATABASE LOKAL
+    await _userStore.updatePassword(widget.email, password);
+
     _showStatusDialog(
       title: 'Berhasil!',
-      message: 'Password baru Anda telah berhasil disimpan. Silakan login kembali.',
+      message: 'Password baru Anda telah berhasil disimpan. Password lama sudah tidak berlaku lagi.',
       icon: Icons.check_circle_outline,
       iconColor: Colors.green,
       isSuccess: true,
@@ -163,7 +168,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
             style: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.bold),
             children: [
               const TextSpan(text: 'BARBER', style: TextStyle(color: Color(0xFFE69110))),
-              const TextSpan(text: 'U', style: TextStyle(color: Color(0xFFA0522D))),
+              const TextSpan(text: 'U', style: TextStyle(color: Colors.white)),
               const TextSpan(text: 'NPAS', style: TextStyle(color: Color(0xFFE69110))),
             ],
           ),
@@ -194,7 +199,6 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
             ),
             const SizedBox(height: 48),
             
-            // New Password Field
             _buildLabel('New Password'),
             _buildPasswordField(_passwordController, _obscurePassword, () {
               setState(() => _obscurePassword = !_obscurePassword);
@@ -202,7 +206,6 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
             
             const SizedBox(height: 24),
             
-            // Confirm New Password Field
             _buildLabel('Confirm New Password'),
             _buildPasswordField(_confirmPasswordController, _obscureConfirmPassword, () {
               setState(() => _obscureConfirmPassword = !_obscureConfirmPassword);
@@ -210,7 +213,6 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
             
             const SizedBox(height: 32),
             
-            // Security Requirements Card
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -267,7 +269,6 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
             
             const SizedBox(height: 48),
             
-            // Save Button
             SizedBox(
               width: double.infinity,
               height: 56,

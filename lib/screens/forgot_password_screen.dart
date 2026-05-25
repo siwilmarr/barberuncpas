@@ -133,24 +133,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     setState(() => _isLoading = true);
 
-    // 1. Generate Kode 6 Digit Acak
     String randomCode = (Random().nextInt(900000) + 100000).toString();
     
-    // 2. CETAK KODE DI TERMINAL (Untuk Testing)
     debugPrint('=========================================');
     debugPrint('PENGIRIMAN KODE VERIFIKASI BARBERUNPAS');
     debugPrint('Email Tujuan: $email');
     debugPrint('KODE VERIFIKASI ANDA: $randomCode');
     debugPrint('=========================================');
 
-    // Simulasi delay pengiriman
     await Future.delayed(const Duration(seconds: 2));
 
     if (mounted) {
       setState(() => _isLoading = false);
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => VerificationCodeScreen(correctCode: randomCode)),
+        MaterialPageRoute(
+          builder: (context) => VerificationCodeScreen(
+            correctCode: randomCode,
+            email: email, // Kirim email ke halaman berikutnya
+          ),
+        ),
       );
     }
   }
@@ -167,7 +169,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Back Button
               GestureDetector(
                 onTap: () => Navigator.pop(context),
                 child: Row(
@@ -186,7 +187,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
               const SizedBox(height: 60),
-              // Logo
               Center(
                 child: Column(
                   children: [
@@ -195,7 +195,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         style: GoogleFonts.poppins(fontSize: 28, fontWeight: FontWeight.bold),
                         children: [
                           const TextSpan(text: 'BARBER', style: TextStyle(color: Color(0xFFE69110))),
-                          const TextSpan(text: 'U', style: TextStyle(color: Color(0xFFA0522D))),
+                          const TextSpan(text: 'U', style: TextStyle(color: Colors.white)),
                           const TextSpan(text: 'NPAS', style: TextStyle(color: Color(0xFFE69110))),
                         ],
                       ),
@@ -226,7 +226,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
               const SizedBox(height: 48),
-              // Form Card
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -297,7 +296,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
               const SizedBox(height: 48),
-              // Footer
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
