@@ -1,22 +1,27 @@
 #!/bin/bash
 
-# 1. Masuk ke folder project
-echo "Starting Build Process..."
-
-# 2. Download Flutter SDK (Versi Ringan)
+echo "--- MENGINSTAL FLUTTER ---"
 if [ ! -d "flutter" ]; then
-  echo "Downloading Flutter SDK..."
   git clone https://github.com/flutter/flutter.git -b stable --depth 1
 fi
 
-# 3. Masukkan Flutter ke PATH sistem Vercel
 export PATH="$PATH:`pwd`/flutter/bin"
 
-# 4. Aktifkan fitur Web
+echo "--- KONFIGURASI ---"
 flutter config --enable-web
+flutter doctor
 
-# 5. Jalankan Build (Menggunakan renderer HTML untuk kompatibilitas lebih baik)
-echo "Building Flutter Web..."
+echo "--- MEMULAI BUILD ---"
+# Pastikan menggunakan --output agar folder hasil jelas
 flutter build web --release --web-renderer html
 
-echo "Build Finished Successfully!"
+echo "--- VERIFIKASI HASIL ---"
+if [ -d "build/web" ]; then
+  echo "Folder build/web ditemukan!"
+  ls build/web
+else
+  echo "ERROR: Folder build/web TIDAK DITEMUKAN!"
+  exit 1
+fi
+
+echo "--- BUILD SELESAI ---"
