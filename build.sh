@@ -1,27 +1,23 @@
 #!/bin/bash
 
-echo "--- MENGINSTAL FLUTTER ---"
+echo "--- CLONING FLUTTER ---"
 if [ ! -d "flutter" ]; then
   git clone https://github.com/flutter/flutter.git -b stable --depth 1
 fi
 
 export PATH="$PATH:`pwd`/flutter/bin"
 
-echo "--- KONFIGURASI ---"
+echo "--- PREPARING ---"
 flutter config --enable-web
-flutter doctor
 
-echo "--- MEMULAI BUILD ---"
-# Pastikan menggunakan --output agar folder hasil jelas
-flutter build web --release --web-renderer html
+echo "--- BUILDING ---"
+# Kita gunakan perintah paling dasar agar tidak ada error option
+flutter build web --release
 
-echo "--- VERIFIKASI HASIL ---"
+echo "--- CHECKING OUTPUT ---"
 if [ -d "build/web" ]; then
-  echo "Folder build/web ditemukan!"
-  ls build/web
+  echo "SUCCESS: build/web directory exists."
 else
-  echo "ERROR: Folder build/web TIDAK DITEMUKAN!"
+  echo "ERROR: build/web directory NOT FOUND."
   exit 1
 fi
-
-echo "--- BUILD SELESAI ---"
